@@ -5,32 +5,23 @@
 #    - name: Update apt Cache
 #      apt: update_cache=yes cache_valid_time=3600
 
-    - name: install openjdk-7
-      apt: name=openjdk-7-jdk state=present install_recommends=yes
+    - name: install openjdk-7-jre
+      apt: name=openjdk-7-jre state=present install_recommends=no
 
     - name: install tomcat8
-      apt: name=tomcat8
+      apt: name=tomcat8  install_recommends=no
 
     - name: install nginx
-      apt: name=nginx
-
-    - name: install xmlstarlet
-      apt: name=xmlstarlet
-
-    - name: install maven
-      apt: name=maven
-
-    - name: install python
-      apt: name=python
+      apt: name=nginx  install_recommends=no
 
     - name: install python-lxml
-      apt: name=python-lxml
+      apt: name=python-lxml  install_recommends=no
 
     - name: install mysql-server
-      apt: name=mysql-server
+      apt: name=mysql-server  install_recommends=no
 
     - name: install python-mysqldb
-      apt: name=python-mysqldb
+      apt: name=python-mysqldb  install_recommends=no
 
     - name: Start the MySQL service
       action: service name=mysql state=started
@@ -43,11 +34,10 @@
       action: service name=mysql state=restarted enabled=true
 
     - name: Download and untar flyway
-      unarchive: src=files/flyway-commandline-4.0.1.tar.gz dest=/home copy=yes
+      unarchive: src=files/flyway-commandline-4.0.1.tar.gz dest=/home
 
     - name: Create symlink to flyway
       file: src=/home/flyway-4.0.1 dest=/home/flyway state=link
-
 
     - name: copy MISO db config file
       copy: src=files/ROOT.xml dest=/etc/tomcat8/Catalina/localhost/ROOT.xml
@@ -66,7 +56,7 @@
     - name: Download and untar MISO properties
       unarchive: >
         src=files/miso_userspace_properties.tar.gz
-        dest=/storage/miso copy=yes
+        dest=/storage/miso
         owner=tomcat8
         group=tomcat8
         mode=0755
