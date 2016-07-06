@@ -1,0 +1,18 @@
+<Context path="/ROOT" docBase="/var/lib/tomcat8/webapps/ROOT" debug="1">
+      <Resource name="jdbc/MISODB" type="javax.sql.DataSource"
+      driverClassName="com.mysql.jdbc.Driver"
+      initialSize="32"
+      maxIdle="10"
+      maxActive="100"
+      maxWait="1000"
+      removeAbandoned="true"
+      removeAbandonedTimeout="120"
+      logAbandoned="true"
+      testWhileIdle="true"
+      testOnBorrow="true"
+      testOnReturn="true"
+      validationQuery="select 1"
+      url="jdbc:mysql://localhost:3306/miso?autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=EST"
+      username="misouser"
+      password="12345"/>
+</Context>
