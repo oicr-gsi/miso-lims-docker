@@ -1,0 +1,21 @@
+FROM miso-env
+RUN     apt-get -y clean && apt-get -y install  \
+         maven
+
+RUN     git clone https://github.com/TGAC/miso-lims.git
+RUN     cd miso-lims &&\
+        mvn package -P external
+RUN	cp /miso-lims/miso-web/target/ROOT.war /var/lib/tomcat8/webapps/
+RUN	rm -rf miso-lims
+
+RUN	chmod 0444 /var/lib/tomcat8/webapps/ROOT.war &&\
+	chown tomcat8 /var/lib/tomcat8/webapps/ROOT.war &&\
+	chgrp tomcat8 /var/lib/tomcat8/webapps/ROOT.war
+
+RUN	rm -rf /var/lib/tomcat8/webapps/ROOT
+
+RUN	cd /home/ && bash /root/miso-ansible/files/miso-install.sh develop
+
+
+CMD	["/root/miso-ansible/misoStart.sh"]
+

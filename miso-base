@@ -24,25 +24,17 @@ RUN	git clone git://github.com/ansible/ansible.git --recursive &&\
 	 git checkout tags/v2.1.0.0-1 &&\
 	 git submodule update --init
 
-#Clone and install MISO 
-RUN	git clone https://github.com/TGAC/miso-lims.git
-RUN	apt-get -y clean && apt-get -y install 	\
-	 openjdk-7-jdk 				\
-	 maven
-RUN	cd miso-lims &&\
-	mvn package -P external
+#copy the local files for ansible and startup to the container
+COPY    miso-ansible/ /root/miso-ansible/ 
 
-
-RUN	echo "INVALIDATOR"
-COPY	miso-ansible/ /root/miso-ansible/ 
 #/bin/sh is a symlink to /bin/dash, which does not support 'source' command
-RUN	rm /bin/sh && ln -s /bin/bash /bin/sh
-RUN	source /ansible/hacking/env-setup &&\
-	 export ANSIBLE_INVENTORY=/root/miso-ansible/hosts &&\
-	 ansible-playbook /root/miso-ansible/miso.yml
+RUN     rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN     apt-get -y -q update && apt-get -y clean &&\
+	 source /ansible/hacking/env-setup &&\
+         export ANSIBLE_INVENTORY=/root/miso-ansible/hosts &&\
+         ansible-playbook /root/miso-ansible/miso.yml
 
-RUN	chmod +x /root/miso-ansible/misoStart.sh
-EXPOSE	8080
+#make the start command ready to run
+RUN     chmod +x /root/miso-ansible/misoStart.sh
 
-CMD	["/root/miso-ansible/misoStart.sh"]
-
+EXPOSE  8080

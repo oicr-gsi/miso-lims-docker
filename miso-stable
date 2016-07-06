@@ -1,0 +1,17 @@
+FROM miso-base
+RUN     apt-get -y clean && apt-get -y install  \
+	 wget
+
+RUN	wget -k https://seqwaremaven.oicr.on.ca/artifactory/simple/seqware-dependencies/ca/on/oicr/pde/miso-web/0.2.18/miso-web-0.2.18.war &&\
+	 cp miso-web-0.2.18.war /var/lib/tomcat8/webapps/ROOT.war
+RUN	chmod 0444 /var/lib/tomcat8/webapps/ROOT.war &&\
+	chown tomcat8 /var/lib/tomcat8/webapps/ROOT.war &&\
+	chgrp tomcat8 /var/lib/tomcat8/webapps/ROOT.war
+
+RUN	rm -rf /var/lib/tomcat8/webapps/ROOT
+
+RUN	cd /home/ && bash /root/miso-ansible/files/miso-install.sh 0.2.18
+
+
+CMD	["/root/miso-ansible/misoStart.sh"]
+
