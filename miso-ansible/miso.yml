@@ -5,17 +5,17 @@
 #    - name: Update apt Cache
 #      apt: update_cache=yes cache_valid_time=3600
 
-    - name: install openjdk-7-jre
-      apt: name=openjdk-7-jre state=present install_recommends=no
+#    - name: install openjdk-7-jre
+#      apt: name=openjdk-7-jre state=present install_recommends=no
 
-    - name: install tomcat8
-      apt: name=tomcat8  install_recommends=no
+#    - name: install tomcat8
+#      apt: name=tomcat8  install_recommends=no
 
-    - name: install nginx
-      apt: name=nginx  install_recommends=no
+#    - name: install nginx
+#      apt: name=nginx  install_recommends=no
 
-    - name: install python-lxml
-      apt: name=python-lxml  install_recommends=no
+#    - name: install python-lxml
+#      apt: name=python-lxml  install_recommends=no
 
     - name: install mysql-server
       apt: name=mysql-server  install_recommends=no
@@ -33,9 +33,17 @@
     - name: Restart the MySQL service
       action: service name=mysql state=restarted enabled=true
 
-    - name: Download and untar flyway
-      unarchive: src=files/flyway-commandline-4.0.1.tar.gz dest=/home
+    - name: Download flyway
+      maven_artifact: >
+        group_id=org.flywaydb
+        artifact_id=flyway-commandline
+        version=4.0.1
+        extension=tar.gz
+        dest=/home
 
+    - name: Untar flyway
+      unarchive: src=/home/flyway-commandline-4.0.1.tar.gz dest=/home remote_src=yes
+ 
     - name: Create symlink to flyway
       file: src=/home/flyway-4.0.1 dest=/home/flyway state=link
 

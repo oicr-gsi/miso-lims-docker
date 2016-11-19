@@ -1,34 +1,22 @@
 # miso-lims-docker
 
-Docker container for [miso-lims](https://github.com/TGAC/miso-lims).
+Base Docker container for [miso-lims](https://github.com/TGAC/miso-lims). This container is built from Tomcat 8.0 and installs MySQL 5.7, nginx, and a number of libraries that miso-lims needs. 
 
 ## Prerequisites
 
 * Docker 1.9+
 * Internet connection
 
-## Build
+## Build and Deploy
 
-To build any of the miso-lims containers, you first need to build the miso-base container:
-
-    docker build -t miso-base -f miso-base .
-
-And then you can build either the stable release:
- 
-    docker build -t miso-stable -f miso-stable .
-
-Or build the latest from develop:
-
-    docker build -t miso-develop -f miso-develop .
+    docker build -t misolims/miso-base .
 
 
-## Running
+Once the container is built, push it to Docker Hub:
 
-To run, launch the container with the appropriate ports open:
-
-    sudo docker run -p 8090:8080 -d -t miso-stable
-
-Navigate to http://localhost:8090 to login to miso with the credentials admin/admin.
+    docker login
+    docker push misolims/miso-base
 
 
+This image is used in the [miso-lims](https://github.com/TGAC/miso-lims) Dockerfile.
 
