@@ -20,3 +20,6 @@ Once the container is built, push it to Docker Hub:
 
 This image is used in the [miso-lims](https://github.com/TGAC/miso-lims) Dockerfile.
 
+## Availability
+
+The [Dockerfile is available from GitHub](https://github.com/oicr-gsi/miso-lims-docker) and the built container is [available on Docker Hub](https://hub.docker.com/r/misolims/miso-base/).

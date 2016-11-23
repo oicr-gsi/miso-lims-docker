@@ -2,21 +2,6 @@
   hosts: misoservers
   become: true
   tasks:
-#    - name: Update apt Cache
-#      apt: update_cache=yes cache_valid_time=3600
-
-#    - name: install openjdk-7-jre
-#      apt: name=openjdk-7-jre state=present install_recommends=no
-
-#    - name: install tomcat8
-#      apt: name=tomcat8  install_recommends=no
-
-#    - name: install nginx
-#      apt: name=nginx  install_recommends=no
-
-#    - name: install python-lxml
-#      apt: name=python-lxml  install_recommends=no
-
     - name: install mysql-server
       apt: name=mysql-server  install_recommends=no
 
