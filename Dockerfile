@@ -6,7 +6,7 @@ ENV DEPS="\
             nginx   \
             openjdk-7-jre \
             python-lxml \
-            python-mysqldb "
+            python-mysqldb" 
 
 
 ENV BUILD_PKGS="\
@@ -15,7 +15,7 @@ ENV BUILD_PKGS="\
             build-essential        \
             libssl-dev             \
             python-dev             \
-            ca-certificates"
+            ca-certificates "
 
 ENV TO_REMOVE="binutils build-essential bzip2 ca-certificates cpp cpp-4.9 dpkg-dev g++ \
   g++-4.9 gcc gcc-4.9 libasan1 libatomic1 libc-dev-bin libc6-dev libcilkrts5 \
@@ -43,19 +43,22 @@ RUN     rm /bin/sh && ln -s /bin/bash /bin/sh           &&\
             six             \
             pycrypto                                    &&\
         git clone git://github.com/ansible/ansible.git --branch v2.1.0.0-1 --recursive --depth 1 /ansible &&\
-        rm -r /ansible/test /ansible/docsite                          &&\
+        rm -r /ansible/test /ansible/docsite                         &&\ 
         apt-get purge --auto-remove -q -y $BUILD_PKGS $TO_REMOVE      &&\
+        apt-get -y -q --no-install-recommends install           \
+            $DEPS						&&\ 
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN     apt-get -y -q update                                    &&\
-        apt-get -y -q --no-install-recommends install           \
-            $DEPS                                               
 #copy the local files for ansible and startup to the container
 COPY    . /root/
 
-
-
-RUN     source /ansible/hacking/env-setup                       &&\
+# Debian doesn't have mysql 5.7 by default, so add the repo and then proceed with
+# the installation
+RUN	apt-key add /root/miso-ansible/mysql-sig-key.gpg &&\
+	echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-5.7" > /etc/apt/sources.list.d/mysql.list &&\
+	echo "deb http://repo.mysql.com/apt/debian/ jessie connector-python-2.0" >> /etc/apt/sources.list.d/mysql.list &&\
+	apt-get -y -q update &&\
+        source /ansible/hacking/env-setup                       &&\
         export ANSIBLE_INVENTORY=/root/miso-ansible/hosts       &&\
         ansible-playbook /root/miso-ansible/miso.yml            &&\
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*           &&\
