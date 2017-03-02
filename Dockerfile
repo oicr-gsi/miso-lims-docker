@@ -1,10 +1,13 @@
 FROM debian:jessie
 
+RUN    echo "deb http://ftp.de.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+
 ENV DEPS="\
             python  \
             tomcat8 \
             nginx   \
-            openjdk-7-jre \
+            openjdk-8-jre \
+            openjdk-8-jre-headless \
             python-lxml \
             python-mysqldb" 
 
@@ -15,7 +18,7 @@ ENV BUILD_PKGS="\
             build-essential        \
             libssl-dev             \
             python-dev             \
-            ca-certificates "
+            ca-certificates"
 
 ENV TO_REMOVE="binutils build-essential bzip2 ca-certificates cpp cpp-4.9 dpkg-dev g++ \
   g++-4.9 gcc gcc-4.9 libasan1 libatomic1 libc-dev-bin libc6-dev libcilkrts5 \
@@ -43,12 +46,13 @@ RUN     rm /bin/sh && ln -s /bin/bash /bin/sh           &&\
             six             \
             pycrypto                                    &&\
         git clone git://github.com/ansible/ansible.git --branch v2.1.0.0-1 --recursive --depth 1 /ansible &&\
-        rm -r /ansible/test /ansible/docsite                         &&\ 
+        rm -r /ansible/test /ansible/docsite                          &&\
         apt-get purge --auto-remove -q -y $BUILD_PKGS $TO_REMOVE      &&\
-        apt-get -y -q --no-install-recommends install           \
-            $DEPS						&&\ 
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN     apt-get -y -q update                                    &&\
+        apt-get -y -q --no-install-recommends install           \
+            -t jessie-backports  $DEPS
 #copy the local files for ansible and startup to the container
 COPY    . /root/
 
