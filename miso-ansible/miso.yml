@@ -56,7 +56,7 @@
 
     - name: download jndi-file-factory
       get_url: >
-        url=http://hasbanana.co.uk/maven/repo/uk/ac/ebi/fgpt/jndi-file-factory/1.0/jndi-file-factory-1.0.jar
+        url=https://repos.tgac.ac.uk/miso/common/jndi-file-factory-1.0.jar
         dest=/var/lib/tomcat8/lib/
         owner=tomcat8
         group=tomcat8
