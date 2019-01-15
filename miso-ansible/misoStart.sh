@@ -1,6 +1,8 @@
 #!/bin/bash
 # Inspired by http://stackoverflow.com/questions/24265354/tomcat7-in-debianwheezy-docker-instance-fails-to-start
+# Also by: https://github.com/docker/for-linux/issues/72
 
+find /var/lib/mysql -type f -exec touch {} \;
 /etc/init.d/mysql start
 /etc/init.d/tomcat8 start
 
